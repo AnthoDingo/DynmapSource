@@ -24,12 +24,14 @@ namespace dynmap.core
         public string PrivateKey;
         public int syncInterval;
         public string WebCoreAddress;
+        public bool displayInChat;
 
         public void LoadDefaults()
         {
             PrivateKey = "MySecretPrivateKey";
             syncInterval = 5000;
             WebCoreAddress = "http://localhost";
+            displayInChat = true;
         }
     }
 
@@ -39,7 +41,7 @@ namespace dynmap.core
         public static Dynmap Instance;
         public List<CSteamID> Nicks = new List<CSteamID>();
         public Timer myTimer;
-        public string directory = Directory.GetCurrentDirectory();
+        public string directory = System.IO.Directory.GetCurrentDirectory();
         public string[] maps;
         public string sendMaps;
         public string data = string.Empty;
@@ -58,11 +60,15 @@ namespace dynmap.core
 
 
         protected override void Load()
-        {   
+        {
+            Logger.Log("Starting Dynmap ...");
+
             //Načtení privátního klíče a složky Maps
             PrivateKey = Configuration.Instance.PrivateKey;
-            maps = Directory.GetDirectories(directory + @"/../../../Maps");
-
+            maps = System.IO.Directory.GetDirectories(System.IO.Path.GetFullPath(directory + @"/../../../Maps"));
+            foreach(string map in maps){
+                Logger.Log("Finding maps : " + map);
+            }
 
             //Vypsání map na serveru
             foreach (string splitMap in maps)
@@ -94,8 +100,8 @@ namespace dynmap.core
             }
 
             //Deaktivuje plugin, pokud se PrivateKey neshoduje
-            
-            if(output == "Error.PrivateKeyNotMatch")
+
+            if (output == "Error.PrivateKeyNotMatch")
             {
                 Logger.LogError("Priavte keys in dynmap-config.php and in Dynmap.configuration.xml doesn't match!");
                 Logger.LogError("Unloading plugin!");
@@ -114,14 +120,14 @@ namespace dynmap.core
                     //Generování TransferID
 
                     RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-                    byte[] rndNumber = new byte[20]; 
+                    byte[] rndNumber = new byte[20];
                     rng.GetBytes(rndNumber);
                     string TransferID = Convert.ToBase64String(rndNumber);
-                    
+
                     //TransferID
                     TransferID = TransferID.Remove(TransferID.Length - 1);
-                    
-                    
+
+
                     //Odeslání TransferID na server 
                     url = Configuration.Instance.WebCoreAddress + "/dynmap-core.php?user=server";
                     string TransferIDdata = "TransferID=" + Uri.EscapeDataString(TransferID) + "&privatekey=" + PrivateKey;
@@ -146,28 +152,34 @@ namespace dynmap.core
                         output = reader.ReadToEnd();
                     }
 
+                    string mapName = uploadMaps[o].Split('/')[uploadMaps[o].Split('/').Length - 1];
                     //Nahrání souborů map na server
-                    System.Net.WebClient Client = new System.Net.WebClient ();
+                    System.Net.WebClient Client = new System.Net.WebClient();
                     Client.Headers.Add("Content-Type", "binary/octet-stream");
-                    byte[] result = Client.UploadFile(Configuration.Instance.WebCoreAddress + "/dynmap-core.php?user=server&do=uploadfile&TransferID=" + Uri.EscapeDataString(TransferID) + "&mapname=" + uploadMaps[o], "POST", directory + @"/../../../Maps/" + uploadMaps[o] + @"/Map.png"); 
-                    String s = System.Text.Encoding.UTF8.GetString (result,0,result.Length);
+                    try {
+                        byte[] result = Client.UploadFile(Configuration.Instance.WebCoreAddress + "/dynmap-core.php?user=server&do=uploadfile&TransferID=" + Uri.EscapeDataString(TransferID) + "&mapname=" + Uri.EscapeDataString(mapName), "POST", uploadMaps[o] + @"/Map.png");
+                        String s = System.Text.Encoding.UTF8.GetString(result, 0, result.Length);
 
-                    if (s == "Error.UploadDone")
-                    {
-                        Logger.LogWarning("Uploaded " + uploadMaps[o]);
+                        if (s == "Error.UploadDone")
+                        {
+                            Logger.LogWarning("Uploaded " + uploadMaps[o]);
+                        }
+                        else if (s == "1Error.UploadFailed")
+                        {
+                            Logger.LogError("Uploading " + uploadMaps[o] + " failed because the uploaded file exceeds the upload_max_filesize directive in php.ini.");
+                            Logger.LogError("See http://php.net/manual/en/ini.core.php#ini.upload-max-filesize for further information!");
+                        }
+                        else
+                        {
+                            Logger.LogError("Uploading " + uploadMaps[o] + " failed!");
+                        }
+                    } catch(System.Net.WebException e) {
+                        Logger.LogException(e);
                     }
-                    else if (s == "1Error.UploadFailed")
-                    {
-                        Logger.LogError("Uploading " + uploadMaps[o] + " failed because the uploaded file exceeds the upload_max_filesize directive in php.ini.");
-                        Logger.LogError("See http://php.net/manual/en/ini.core.php#ini.upload-max-filesize for further information!");
-                    }
-                    else
-                    {
-                        Logger.LogError("Uploading " + uploadMaps[o] + " failed!");
-                    } 
+                    
                 }
-                if (o == uploadMaps.Length - 1) { Logger.LogWarning("Uploading done!");};
-                
+                if (o == uploadMaps.Length - 1) { Logger.LogWarning("Uploading done!"); };
+
             }
 
             //Časovač odesílající data o pozici na server
@@ -187,14 +199,14 @@ namespace dynmap.core
 
             //Přidání hráčů do listu při připojení na server
             U.Events.OnPlayerConnected += (UnturnedPlayer player) =>
-                {
-                    Nicks.Add(player.CSteamID);
-                };
+            {
+                Nicks.Add(player.CSteamID);
+            };
             //Odebrání hráčů z listu při odpojení ze serveru
             U.Events.OnPlayerDisconnected += (UnturnedPlayer player) =>
-                {
-                    Nicks.Remove(player.CSteamID);
-                };
+            {
+                Nicks.Remove(player.CSteamID);
+            };
             U.Events.OnShutdown += () =>
             {
                 shutdown = true;
@@ -222,14 +234,14 @@ namespace dynmap.core
                 characterName = player.CharacterName.Replace(";", "&#59").Replace("[", "&#91").Replace("]", "&#93").Replace("=", "&#61");
                 rotation = Convert.ToInt32(player.Rotation);
                 if (player.IsAdmin == true) { playerStatus = "admin"; } else if (player.IsPro == true) { playerStatus = "pro"; } else { playerStatus = "player"; }
-                UnturnedChat.Say(player, player.Position + "=Position");
+                if (Configuration.Instance.displayInChat == true) { UnturnedChat.Say(player, player.Position + "=Position"); }
                 if (player.Features.VanishMode == false) { data = data + "[Charactername=" + characterName + ";CSteamID=" + player.CSteamID + ";Position=" + player.Position + ";Rotation=" + rotation + ";PlayerStatus=" + playerStatus + "]"; };
             }
 
             //Odešle data na server
             if (data != string.Empty || firstrun == true)
             {
-                url =  Configuration.Instance.WebCoreAddress + "/dynmap-core.php?user=server";
+                url = Configuration.Instance.WebCoreAddress + "/dynmap-core.php?user=server";
                 postData = "map=" + SDG.Unturned.Provider.map + "&data=" + Uri.EscapeDataString(data) + "&privatekey=" + PrivateKey;
                 if (shutdown == true) { postData = "map=" + SDG.Unturned.Provider.map + "&privatekey=" + PrivateKey; };
                 var post = Encoding.ASCII.GetBytes(postData);
