@@ -45,11 +45,11 @@
 			if (!isset($_GET["maps"])) {
 				$file = $cachefolder . "/dynmap.dat";
 				$file = fopen($file, "w+");
-				fwrite($file, "[map=" . $_POST["map"] . "]" . $_POST["data"]);
+				fwrite($file, "[map=" . rawurldecode($_POST["map"]) . "]" . $_POST["data"]);
 			} else {
 			//Kontrola stažených souborů map
 				//Čtení dat od serveru
-				$maps = urldecode($_GET["maps"]);
+				$maps = rawurldecode($_GET["maps"]);
 				$maps = explode(";", $maps);
 
 				$downloadedMaps = scandir($mapsfolder);
@@ -76,7 +76,7 @@
 			if ($TransferID == $_GET["TransferID"]) {
 				if (is_uploaded_file($_FILES['file']['tmp_name'])) 
 	    		{
-        			$uploadfile = $mapsfolder. "/" . $_GET["mapname"] . ".png";
+					$uploadfile = $mapsfolder. "/" . rawurldecode($_GET["mapname"]) . ".png";
         			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
         				echo "Error.UploadDone";
         				$_SESSION["TransferID"] = null;
@@ -98,5 +98,5 @@
 		$filehandle = fopen($file, "r");
 		$data = fread($filehandle, filesize($file));
 		echo $data;
-	}	
+	}
 ?>

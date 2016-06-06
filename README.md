@@ -1,3 +1,5 @@
+# Server Configuration
+
 By default, Nginx and PHP5 allow POST 2M.
 It's to small. Some Map.png are larger than 2M.
 
@@ -21,5 +23,5 @@ upload_max_filesize = 20M
 post_max_size = 20M
 `
 
-### Edit :
-Change 20M by the size you want.
+### Custom Size :
+Change 20M by the size you want, ex: 30M or 1G
