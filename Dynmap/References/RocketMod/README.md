@@ -1,7 +1,9 @@
+## RocketMod
+
 Download RocketMod from https://rocketmod.net/get-rocket
 
 Copy/Paste file from RocketMod to this folder :
-_Assembly-CSharp.dll
-_Rocket.API.dll
-_Rocket.Core.dll
-_Rocket.Unturned.dll
+* Assembly-CSharp.dll
+* Rocket.API.dll
+* Rocket.Core.dll
+* Rocket.Unturned.dll

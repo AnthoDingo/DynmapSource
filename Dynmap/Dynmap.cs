@@ -61,13 +61,13 @@ namespace dynmap.core
 
         protected override void Load()
         {
-            Logger.Log("Starting Dynmap ...");
+            Logger.Log("Loading ...");
 
             //Načtení privátního klíče a složky Maps
             PrivateKey = Configuration.Instance.PrivateKey;
             maps = System.IO.Directory.GetDirectories(System.IO.Path.GetFullPath(directory + @"/../../../Maps"));
             foreach(string map in maps){
-                Logger.Log("Finding maps : " + map);
+                Logger.Log("Finding map : " + map);
             }
 
             //Vypsání map na serveru
@@ -152,12 +152,11 @@ namespace dynmap.core
                         output = reader.ReadToEnd();
                     }
 
-                    string mapName = uploadMaps[o].Split('/')[uploadMaps[o].Split('/').Length - 1];
                     //Nahrání souborů map na server
                     System.Net.WebClient Client = new System.Net.WebClient();
                     Client.Headers.Add("Content-Type", "binary/octet-stream");
                     try {
-                        byte[] result = Client.UploadFile(Configuration.Instance.WebCoreAddress + "/dynmap-core.php?user=server&do=uploadfile&TransferID=" + Uri.EscapeDataString(TransferID) + "&mapname=" + Uri.EscapeDataString(mapName), "POST", uploadMaps[o] + @"/Map.png");
+                        byte[] result = Client.UploadFile(Configuration.Instance.WebCoreAddress + "/dynmap-core.php?user=server&do=uploadfile&TransferID=" + Uri.EscapeDataString(TransferID) + "&mapname=" + Uri.EscapeDataString(uploadMaps[o].Split('/')[uploadMaps[o].Split('/').Length - 1]), "POST", uploadMaps[o] + @"/Map.png");
                         String s = System.Text.Encoding.UTF8.GetString(result, 0, result.Length);
 
                         if (s == "Error.UploadDone")
@@ -242,8 +241,8 @@ namespace dynmap.core
             if (data != string.Empty || firstrun == true)
             {
                 url = Configuration.Instance.WebCoreAddress + "/dynmap-core.php?user=server";
-                postData = "map=" + SDG.Unturned.Provider.map + "&data=" + Uri.EscapeDataString(data) + "&privatekey=" + PrivateKey;
-                if (shutdown == true) { postData = "map=" + SDG.Unturned.Provider.map + "&privatekey=" + PrivateKey; };
+                postData = "map=" + Uri.EscapeDataString(SDG.Unturned.Provider.map) + "&data=" + Uri.EscapeDataString(data) + "&privatekey=" + PrivateKey;
+                if (shutdown == true) { postData = "map=" + Uri.EscapeDataString(SDG.Unturned.Provider.map) + "&privatekey=" + PrivateKey; };
                 var post = Encoding.ASCII.GetBytes(postData);
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
