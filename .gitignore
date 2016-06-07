@@ -29,6 +29,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 *.dll
+.vs/
 
 # =========================
 # Operating System Files
