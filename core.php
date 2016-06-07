@@ -1,6 +1,6 @@
 <?php
 	error_reporting(0);
-	include "dynmap-config.php";
+	include "config/config.php";
 	header('Content-Type: text/html; charset=utf-8');
 
 	//Definice složek
