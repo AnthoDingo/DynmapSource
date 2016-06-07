@@ -8,9 +8,13 @@ In file /etc/nginx/nginx.conf, add this line:
 
 `
 http {
+
 ...
+
 client_max_body_size 20M;
+
 ...
+
 }
 `
 
@@ -19,9 +23,16 @@ Modify your php.ini file :
 
 `
 memory_limit = 32M
+
 upload_max_filesize = 20M
+
 post_max_size = 20M
 `
 
 ### Custom Size :
 Change 20M by the size you want, ex: 30M or 1G
+
+# Dynmap Configuration
+
+Copy/Paste file template-config.php to config.php.
+Edit values in config.php.
