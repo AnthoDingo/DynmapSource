@@ -36,3 +36,9 @@ Change 20M by the size you want, ex: 30M or 1G
 
 Copy/Paste file template-config.php to config.php.
 Edit values in config.php.
+
+# Authentication
+
+If the file config/user.php, authentication is disable.
+
+To enable, copy/paste config/template-ser.php to config/user.php and make sure `$login`is set to `true` in config/config.php.
