@@ -1,7 +1,7 @@
 # Unturned Dynmap
 
 _**Only for Linux**_
-If you want use Windows version, checkout [Linux branch](https://github.com/AnthoDingo/DynmapSource/tree/Windows)
+If you want use Windows version, checkout [Windows branch](https://github.com/AnthoDingo/DynmapSource/tree/Windows)
 
 ## 1 Required files
 
