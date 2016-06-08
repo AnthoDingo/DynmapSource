@@ -49,3 +49,6 @@ Temporary Items
 ftp-sync.json
 config.php
 users.php
+cursor.png
+.maps/
+.cache/
