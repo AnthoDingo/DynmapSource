@@ -12,8 +12,6 @@
             <font style="font-size: 25px; font-weight: bold">Please login to see Unturned Dynmap<br /><br/>
                 Your username: <input type="text" name="username"><br>
                 Your password: <input type="password" name="password"><br>
-                <!-- <input type="submit" value="Login!"> -->
-                <br />
                 <button type="submit"><i class="fa fa-sign-in" aria-hidden="true"></i> Login !</button>
                 <br />
             </font>
