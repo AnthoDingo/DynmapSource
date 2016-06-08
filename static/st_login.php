@@ -4,7 +4,7 @@
         <title><?php echo $DynmapTitle; ?></title>
         <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
-        <link rel="stylesheet" type="text/css" href="/css/css_login.php" />
+        <link rel="stylesheet" type="text/css" href="css/css_login.php" />
     </head>
     <body>
         <div id="error" <?php if($displayError == false){ echo 'style="display: none;"';} ?>>Password or username was incorrect! Try again.</div>

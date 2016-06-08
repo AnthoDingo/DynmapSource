@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
-        <link rel="stylesheet" type="text/css" href="/css/css_map.php" />
+        <link rel="stylesheet" type="text/css" href="css/css_map.php" />
     </head>
     <body>
         <div id="main">
@@ -36,6 +36,6 @@
         </form>
         <noscript>Javascript is required for runinng this application!</noscript>
         <script type="text/javascript">var syncinterval = <?php echo $syncinterval; ?>;</script>
-        <script src="/js/js_map.js"></script>
+        <script src="js/js_map.js"></script>
     </body>
 </html>
