@@ -180,8 +180,9 @@ function sendRequest() {
 					admin++;
 				};
 
-				var coeff;
+				var coeff = $("#mainImage").get(0).naturalHeight / 2;
 				//Přepočítání pozice x na hodnotu left
+				/*
 				if ($("#mainImage").get(0).naturalHeight == "1024") {
 					coeff = 512;
 				} else if($("#mainImage").get(0).naturalHeight == "2048") {
@@ -189,7 +190,7 @@ function sendRequest() {
 				} else if($("#mainImage").get(0).naturalHeight == "512") {
 					coeff = 256;
 				}
-
+				*/
 				if (Number(x) < 0) {
 					var left = Number(x)*-1;
 					//var left = Number(left)/1.93630573;
