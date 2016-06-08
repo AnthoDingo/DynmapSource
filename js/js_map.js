@@ -125,7 +125,7 @@ function sendRequest() {
 	offsetWidth = $("#mainImage").get(0).offsetWidth;
 
 	xmultiplicator =  Number(offsetWidth) / Number(naturalWidth);
-	zmultiplicator = Number(offsetHeight) / Number(naturalHeight);
+	zmultiplicator = Number(offsetHeight) / Number(naturalHeight);	
 
 	//Vypsání hráčů
 	if (firstRun == false) {
@@ -185,7 +185,6 @@ function sendRequest() {
 				if ($("#mainImage").get(0).naturalHeight == "1024") {
 					coeff = 512;
 				} else if($("#mainImage").get(0).naturalHeight == "2048") {
-	
 					coeff = 1024;
 				} else if($("#mainImage").get(0).naturalHeight == "512") {
 					coeff = 256;
@@ -193,27 +192,31 @@ function sendRequest() {
 
 				if (Number(x) < 0) {
 					var left = Number(x)*-1;
-					var left = Number(left)/1.93630573;
+					//var left = Number(left)/1.93630573;
 					var left = coeff - Number(left);
 					var left = Number(left) * Number(xmultiplicator);
+					var left = Number(left) - 10;
 				} else {
 					var left = Number(x);
-					var left = Number(left)/1.93630573;
+					//var left = Number(left)/1.93630573;
 					var left = Number(left) + coeff;
 					var left = Number(left) * Number(xmultiplicator);
+					var left = Number(left) + 25;
 				}
 
 				//Přepočítání hodnoty x na hodnotu top
 				if (Number(z) < 0) {
 					var top = Number(z);
-					var top = Number(top)/1.93630573;
+					//var top = Number(top)/1.93630573;
 					var top = coeff - Number(top);
 					var top = Number(top) * Number(zmultiplicator);
+					var top = Number(top) + 10;
 				} else {
 					var top = Number(z)*-1;
-					var top = Number(top)/1.93630573;
+					//var top = Number(top)/1.93630573;
 					var top = Number(top) + coeff;
 					var top = Number(top) * Number(zmultiplicator);
+					var top = Number(top) - 20;
 				}
 
 				var adding = $("#positionFrameWrap").html() + '\
