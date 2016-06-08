@@ -1,6 +1,6 @@
 <?php 
 
-$version = "0.3.6.1";
+$version = "0.3.6.2";
 /*
 * Original work from https://github.com/LinhyCZ/DynmapSource
 * Original autor : LinhyCZ https://github.com/LinhyCZ

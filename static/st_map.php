@@ -35,6 +35,7 @@
             </div>
         </form>
         <noscript>Javascript is required for runinng this application!</noscript>
-        <script src="/js/js_map.php"></script>
+        <script type="text/javascript">var syncinterval = <?php echo $syncinterval; ?>;</script>
+        <script src="/js/js_map.js"></script>
     </body>
 </html>

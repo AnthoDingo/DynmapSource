@@ -42,5 +42,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+
+# Project Ignore
+# =========================
+
+ftp-sync.json
 config.php
-user.php
+users.php
